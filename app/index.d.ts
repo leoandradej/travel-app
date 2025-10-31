@@ -1,3 +1,5 @@
+import type { Models } from "appwrite";
+
 declare interface BaseUser {
   id: string;
   name: string;
