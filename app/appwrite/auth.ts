@@ -14,7 +14,7 @@ export const loginWithGoogle = async () => {
   }
 };
 
-export const logoutUSer = async () => {
+export const logoutUser = async () => {
   try {
     await account.deleteSession({ sessionId: "current" });
     return true;

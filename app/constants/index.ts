@@ -10,13 +10,13 @@ export const sidebarItems = [
     href: "/dashboard",
   },
   {
-    id: 3,
+    id: 2,
     icon: "/assets/icons/users.svg",
     label: "All Users",
     href: "/all-users",
   },
   {
-    id: 4,
+    id: 3,
     icon: "/assets/icons/itinerary.svg",
     label: "AI Trips",
     href: "/trips",
@@ -104,7 +104,7 @@ export const comboBoxItems = {
 } as Record<keyof TripFormData, string[]>;
 
 export const userXAxis: AxisModel = { valueType: "Category", title: "Day" };
-export const useryAxis: AxisModel = {
+export const userYAxis: AxisModel = {
   minimum: 0,
   maximum: 10,
   interval: 2,
@@ -117,7 +117,7 @@ export const tripXAxis: AxisModel = {
   majorGridLines: { width: 0 },
 };
 
-export const tripyAxis: AxisModel = {
+export const tripYAxis: AxisModel = {
   minimum: 0,
   maximum: 10,
   interval: 2,

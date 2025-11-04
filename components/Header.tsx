@@ -41,12 +41,12 @@ const Header = ({ title, description, ctaText, ctaUrl }: HeaderProps) => {
         <Link to={ctaUrl}>
           <ButtonComponent
             type="button"
-            className="button-class h-11! w-full! md:w-60"
+            cssClass="button-class h-11! w-full! md:w-60"
           >
             <img
               src="/assets/icons/plus.svg"
-              alt="Create a trip"
-              className="size-5"
+              alt="Create a Trip"
+              className="size-5 align-middle! shrink-0!"
             />
             <span className="p-16-semibold text-white">{ctaText}</span>
           </ButtonComponent>

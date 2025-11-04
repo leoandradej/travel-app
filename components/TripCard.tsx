@@ -5,6 +5,7 @@ import {
   ChipsDirective,
   ChipDirective,
 } from "@syncfusion/ej2-react-buttons";
+import type { TripCardProps } from "~/index";
 
 const TripCard = ({
   id,
@@ -21,7 +22,7 @@ const TripCard = ({
       to={
         path.pathname === "/" || path.pathname.startsWith("/travel")
           ? `/travel/${id}`
-          : `/trips/S{id}`
+          : `/trips/${id}`
       }
       className="trip-card"
     >
