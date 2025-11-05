@@ -1,11 +1,13 @@
 import type { Models } from "appwrite";
 
 declare interface BaseUser {
-  id: string;
+  $id: string;
   name: string;
   email: string;
-  dateJoined: string;
+  accountId: string;
+  joinedAt: string;
   imageUrl: string;
+  itineraryCount: number;
 }
 
 declare interface UserData extends BaseUser {

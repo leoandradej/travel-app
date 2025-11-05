@@ -1,6 +1,9 @@
 import { parseTripData } from "~/lib/utils";
 import type { DashboardStats } from "..";
 import { appwriteConfig, database } from "./client";
+import { user } from "~/constants";
+import { Query } from "appwrite";
+import { getUser } from "./auth";
 
 interface Document {
   [key: string]: any;
@@ -13,7 +16,7 @@ type FilterByDate = (
   end?: string
 ) => number;
 
-export const getUSerAndTripsStats = async (): Promise<DashboardStats> => {
+export const getUserAndTripsStats = async (): Promise<DashboardStats> => {
   const d = new Date();
   const startCurrent = new Date(d.getFullYear(), d.getMonth(), 1).toISOString();
   const startPrev = new Date(
@@ -156,4 +159,30 @@ export const getTripsByTravelStyle = async () => {
     count: Number(count),
     travelStyle,
   }));
+};
+
+export const updateUserItineraryCount = async (
+  userId: string,
+  accountId: string
+) => {
+  try {
+    const { total } = await database.listRows({
+      databaseId: appwriteConfig.databaseId,
+      tableId: appwriteConfig.tripsTableId,
+      queries: [Query.equal("userId", accountId)],
+    });
+
+    const updatedUser = await database.updateRow({
+      databaseId: appwriteConfig.databaseId,
+      tableId: appwriteConfig.usersTableId,
+      rowId: userId,
+      data: {
+        itineraryCount: total,
+      },
+    });
+
+    return updatedUser;
+  } catch (error) {
+    console.log("Failed to update user itinerary count: ", error);
+  }
 };

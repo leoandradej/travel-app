@@ -21,7 +21,7 @@ const AllUsers = ({ loaderData }: Route.ComponentProps) => {
     <main className="all-users wrapper">
       <Header
         title="Manage Users"
-        description="Filter, sort, ans access detailed user profiles"
+        description="Filter, Sort, and Access Detailed User Profiles"
       />
 
       <GridComponent dataSource={users} gridLines="None">

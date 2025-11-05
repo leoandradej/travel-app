@@ -1,19 +1,27 @@
 import { Header } from "components";
 import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
 import type { Route } from "./+types/create-trip";
-import type { Country, CreateTripResponse, TripFormData } from "~/index";
+import type {
+  BaseUser,
+  Country,
+  CreateTripResponse,
+  TripFormData,
+  User,
+} from "~/index";
 import { comboBoxItems, selectItems } from "~/constants";
-import { cn, formatKey } from "~/lib/utils";
+import { cn, formatKey, sortCountriesAlphabetically } from "~/lib/utils";
 import {
   LayerDirective,
   LayersDirective,
   MapsComponent,
 } from "@syncfusion/ej2-react-maps";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { world_map } from "~/constants/world_map";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { account } from "~/appwrite/client";
 import { useNavigate } from "react-router";
+import { getUser } from "~/appwrite/auth";
+import { updateUserItineraryCount } from "~/appwrite/dashboard";
 
 export const loader = async () => {
   const response = await fetch("https://restcountries.com/v3.1/independent");
@@ -29,10 +37,12 @@ export const loader = async () => {
 
 const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
   const countries = loaderData as Country[];
+  const sortedCountries = sortCountriesAlphabetically(countries);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<TripFormData>({
-    country: countries[0]?.name || "",
+    country: sortedCountries[0]?.name || "",
     travelStyle: "",
     interest: "",
     budget: "",
@@ -41,8 +51,22 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
   });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  const countryData = countries.map((country) => ({
+  useEffect(() => {
+    (async () => {
+      try {
+        const currentUser = (await getUser()) as BaseUser | null;
+        setUser(currentUser);
+      } catch (err) {
+        console.log("User not logged in:", err);
+      }
+    })();
+  }, []);
+
+  console.log(user?.$id, user?.accountId);
+
+  const countryData = sortedCountries.map((country) => ({
     text: country.name,
     value: country.value,
   }));
@@ -231,6 +255,9 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
             <ButtonComponent
               type="submit"
               className="button-class h-12! w-full!"
+              onClick={() =>
+                updateUserItineraryCount(user?.$id!, user?.accountId!)
+              }
               disabled={isLoading}
             >
               <img

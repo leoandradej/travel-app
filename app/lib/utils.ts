@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import dayjs from "dayjs";
-import type { TrendResult, Trip, TripFormData } from "..";
+import type { Country, TrendResult, Trip, TripFormData } from "..";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -68,4 +68,18 @@ export const formatKey = (key: keyof TripFormData) => {
   return key
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (str) => str.toUpperCase());
+};
+
+export const sortCountriesAlphabetically = (countries: Country[]) => {
+  return [...countries].sort((a, b) => {
+    const nameA = a.name
+      .replace(/[^\p{L}\p{N}\s]/gu, "")
+      .trim()
+      .toLowerCase();
+    const nameB = b.name
+      .replace(/[^\p{L}\p{N}\s]/gu, "")
+      .trim()
+      .toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
 };

@@ -1,17 +1,11 @@
 import { Header, StatsCard, TripCard } from "components";
-import { getAllUsers, getUSer } from "~/appwrite/auth";
-import {
-  allTrips,
-  tripXAxis,
-  tripYAxis,
-  userXAxis,
-  userYAxis,
-} from "~/constants";
+import { getAllUsers, getUser } from "~/appwrite/auth";
+import { tripXAxis, tripYAxis, userXAxis, userYAxis } from "~/constants";
 import type { Route } from "./+types/dashboard";
 import type { User, UserData, UsersItineraryCount } from "~/index";
 import {
   getTripsByTravelStyle,
-  getUSerAndTripsStats,
+  getUserAndTripsStats,
   getUserGrowthPerDay,
 } from "~/appwrite/dashboard";
 import { getAllTrips } from "~/appwrite/trips";
@@ -42,24 +36,27 @@ export const clientLoader = async () => {
     tripsByTravelStyle,
     allUsers,
   ] = await Promise.all([
-    await getUSer(),
-    await getUSerAndTripsStats(),
+    await getUser(),
+    await getUserAndTripsStats(),
     await getAllTrips(4, 0),
     await getUserGrowthPerDay(),
     await getTripsByTravelStyle(),
     await getAllUsers(4, 0),
   ]);
 
-  const allTrips = trips.allTrips.map(({ $id, tripDetail, imageUrls }) => ({
-    id: $id,
-    ...parseTripData(tripDetail),
-    imageUrls: imageUrls ?? [],
-  }));
+  const allTrips = trips.allTrips.map(
+    ({ $id, userId, tripDetail, imageUrls }) => ({
+      id: $id,
+      userId: userId,
+      ...parseTripData(tripDetail),
+      imageUrls: imageUrls ?? [],
+    })
+  );
 
   const mappedUsers: UsersItineraryCount[] = allUsers.users.map((user) => ({
     imageUrl: user.imageUrl,
     name: user.name,
-    count: user.itineraryCount ?? Math.floor(Math.random() * 10),
+    count: user.itineraryCount,
   }));
 
   return {
@@ -101,8 +98,8 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
   return (
     <main className="dashboard wrapper">
       <Header
-        title={`Welcome ${user?.name || "Guest"} 👋🏼`}
-        description="Track activity, trends and popular destinations in real time"
+        title={`Welcome, ${user?.name || "Guest"} 👋🏼`}
+        description="Track Activity, Trends and Popular Destinations in Real Time"
       />
 
       <section className="flex flex-col gap-6">
@@ -136,11 +133,11 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
             <TripCard
               key={trip.id}
               id={trip.id.toString()}
-              name={trip.name}
+              name={trip.name!}
               imageUrl={trip.imageUrls[0]}
               location={trip.itinerary?.[0]?.location ?? ""}
-              tags={[trip.interests, trip.travelStyle]}
-              price={trip.estimatedPrice}
+              tags={[trip.interests!, trip.travelStyle!]}
+              price={trip.estimatedPrice!}
             />
           ))}
         </div>
