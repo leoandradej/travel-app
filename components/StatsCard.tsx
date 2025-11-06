@@ -1,3 +1,4 @@
+import type { StatsCardProps } from "~/index";
 import { calculateTrendPercentage, cn } from "~/lib/utils";
 
 const StatsCard = ({
