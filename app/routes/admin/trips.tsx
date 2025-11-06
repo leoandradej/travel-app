@@ -1,4 +1,3 @@
-import { Header, TripCard } from "components";
 import { useSearchParams, type LoaderFunctionArgs } from "react-router";
 import { getAllTrips } from "~/appwrite/trips";
 import { parseTripData } from "~/lib/utils";
@@ -6,6 +5,7 @@ import type { Route } from "./+types/trips";
 import type { Trip } from "~/index";
 import { useState } from "react";
 import { PagerComponent } from "@syncfusion/ej2-react-grids";
+import { Header, TripCard } from "components";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const limit = 8;
