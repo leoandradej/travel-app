@@ -177,7 +177,7 @@ export const updateUserItineraryCount = async (
       tableId: appwriteConfig.usersTableId,
       rowId: userId,
       data: {
-        itineraryCount: total,
+        itineraryCount: total + 1,
       },
     });
 

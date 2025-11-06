@@ -58,13 +58,11 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
       try {
         const currentUser = (await getUser()) as BaseUser | null;
         setUser(currentUser);
-      } catch (err) {
-        console.log("User not logged in:", err);
+      } catch (error) {
+        console.log("User not logged in:", error);
       }
     })();
   }, []);
-
-  console.log(user?.$id, user?.accountId);
 
   const countryData = sortedCountries.map((country) => ({
     text: country.name,
