@@ -10,6 +10,14 @@ import * as Sentry from "@sentry/react-router";
 import type { Route } from "./+types/root";
 import "./app.css";
 
+export function meta() {
+  return [
+    { title: "Tourvisto" },
+    { name: "description", content: "Your Travel Planner App" },
+    { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+  ];
+}
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
